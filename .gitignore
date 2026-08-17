@@ -1,7 +1,5 @@
 /.env
 /.venv
 /ecoqpay.zip
-/send
-/send copy
 /static
 /__pycache__
