@@ -3,7 +3,7 @@ import base64
 import requests
 from werkzeug.utils import secure_filename
 
-import config
+from .. import config
 
 # =============================================================================
 # GitHub Upload

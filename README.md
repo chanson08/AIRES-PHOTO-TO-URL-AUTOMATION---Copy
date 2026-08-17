@@ -5,13 +5,18 @@ resulting raw URL is turned into an EcoQPay QR code.
 
 ## Project layout
 
-| File | Responsibility |
-|---|---|
-| `upload_image_to_github.py` | Flask app + route (entry point, used by `Procfile`) |
-| `config.py` | environment variables, constants, `validate_config()` |
-| `github_client.py` | uploads the image to a GitHub repo |
-| `ecoqpay_client.py` | generates the EcoQPay QR code from a URL |
-| `templates/index.html` | the upload form / result page |
+```
+run.py                          entry point (used by Procfile)
+app/
+    __init__.py                 create_app() factory
+    config.py                   environment variables, constants, validate_config()
+    routes.py                   the "/" route (blueprint)
+    services/
+        github_client.py        uploads the image to a GitHub repo
+        ecoqpay_client.py       generates the EcoQPay QR code from a URL
+    templates/
+        index.html              upload form / result page
+```
 
 ## Environment variables
 
@@ -29,7 +34,7 @@ cp .env.example .env
 | `FLASK_DEBUG` | no | Set to `true`/`1`/`yes` to enable Flask debug mode locally. Defaults to off — leave it off in production. |
 
 The GitHub repo/branch/folder the image gets uploaded to are set as
-constants in `config.py` (`GITHUB_USERNAME`, `GITHUB_REPO`,
+constants in `app/config.py` (`GITHUB_USERNAME`, `GITHUB_REPO`,
 `GITHUB_UPLOAD_FOLDER`, `GITHUB_BRANCH`), not env vars — edit those
 directly if you're pointing at a different repo.
 
@@ -37,7 +42,7 @@ directly if you're pointing at a different repo.
 
 ```bash
 pip install -r requirements.txt
-python upload_image_to_github.py
+python run.py
 ```
 
 Then open `http://localhost:9999`.
@@ -47,7 +52,7 @@ Then open `http://localhost:9999`.
 The app is set up for Railway (or any host that runs a `Procfile`):
 
 ```
-web: gunicorn -w 4 upload_image_to_github:app
+web: gunicorn -w 4 run:app
 ```
 
 Set `GITHUB_TOKEN` and `ECOQPAY_API_KEY` as environment variables on the

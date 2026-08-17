@@ -1,19 +1,17 @@
-import os
+from flask import Blueprint, render_template, request
 
-from flask import Flask, render_template, request
+from . import config
+from .services.ecoqpay_client import generate_ecoqpay_qr_base64
+from .services.github_client import upload_image_to_github
 
-import config
-from ecoqpay_client import generate_ecoqpay_qr_base64
-from github_client import upload_image_to_github
-
-app = Flask(__name__)
+main_bp = Blueprint("main", __name__)
 
 
 # =============================================================================
 # Routes
 # =============================================================================
 
-@app.route("/", methods=["GET", "POST"])
+@main_bp.route("/", methods=["GET", "POST"])
 def index():
     ecoqpay_image_base64 = None
     error = None
@@ -38,13 +36,3 @@ def index():
         ecoqpay_image_base64=ecoqpay_image_base64,
         error=error,
     )
-
-
-# =============================================================================
-# Entry Point
-# =============================================================================
-
-if __name__ == "__main__":
-    port = int(os.getenv("PORT", 9999))
-    debug = os.getenv("FLASK_DEBUG", "False").lower() in ("1", "true", "yes")
-    app.run(host="0.0.0.0", port=port, debug=debug)

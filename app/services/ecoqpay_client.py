@@ -3,7 +3,7 @@ import secrets
 
 import requests
 
-import config
+from .. import config
 
 # =============================================================================
 # EcoQPay QR Generation
